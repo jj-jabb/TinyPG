@@ -49,11 +49,18 @@ namespace TinyPG.CodeGenerators.CSharp
             tokentype.AppendLine("\r\n            //Terminal tokens:");
             bool first = true;
             foreach (TerminalSymbol s in Grammar.GetTerminals())
-            {
-                regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled");
+			{
+				// Removed RegexOptions.Compiled because they are not supported by the Portable Class Library
+				// TODO: Add a "PortableLibrary" option/attribute
+				//regexps.Append("            regex = new Regex(" + s.Expression.ToString() + ", RegexOptions.Compiled");
 
-                if (s.Attributes.ContainsKey("IgnoreCase"))
-                    regexps.Append(" | RegexOptions.IgnoreCase");
+				//if (s.Attributes.ContainsKey("IgnoreCase"))
+				//	regexps.Append(" | RegexOptions.IgnoreCase");
+
+				regexps.Append("            regex = new Regex(" + s.Expression.ToString());
+
+				if (s.Attributes.ContainsKey("IgnoreCase"))
+					regexps.Append(", RegexOptions.IgnoreCase");
 
                 regexps.Append(");\r\n");
 
